@@ -17,22 +17,22 @@ public class DeliverymanRepository {
         Deliveryman maxi = new Deliveryman("Maxi Meme", Arrays.asList(
                 new Itinerary(LocalTime.of(9, 0), LocalTime.of(17, 0))
         ));
-        deliverymen.put(maxi.getId(), maxi);
+        deliverymen.put(maxi.getDeliverymanId(), maxi);
 
         Deliveryman tough = new Deliveryman("Tough Mass", Arrays.asList(
                 new Itinerary(LocalTime.of(8, 0), LocalTime.of(16, 0))
         ));
-        deliverymen.put(tough.getId(), tough);
+        deliverymen.put(tough.getDeliverymanId(), tough);
 
         Deliveryman luck = new Deliveryman("Luck Ass", Arrays.asList(
                 new Itinerary(LocalTime.of(7, 0), LocalTime.of(15, 0))
         ));
-        deliverymen.put(luck.getId(), luck);
+        deliverymen.put(luck.getDeliverymanId(), luck);
 
         Deliveryman tri = new Deliveryman("Tri Tan", Arrays.asList(
                 new Itinerary(LocalTime.of(10, 0), LocalTime.of(18, 0))
         ));
-        deliverymen.put(tri.getId(), tri);
+        deliverymen.put(tri.getDeliverymanId(), tri);
     }
 
     public Collection<Deliveryman> getAllDeliverymen() {

@@ -28,7 +28,7 @@ public class DeliverymanRestController {
     CollectionModel<EntityModel<Deliveryman>> getAllDeliverymen() {
         List<EntityModel<Deliveryman>> deliverymen = deliverymanRepository.getAllDeliverymen().stream()
                 .map(deliveryman -> EntityModel.of(deliveryman,
-                        linkTo(methodOn(DeliverymanRestController.class).getDeliveryman(deliveryman.getId())).withSelfRel(),
+                        linkTo(methodOn(DeliverymanRestController.class).getDeliveryman(deliveryman.getDeliverymanId())).withSelfRel(),
                         linkTo(methodOn(DeliverymanRestController.class).getAllDeliverymen()).withRel("deliverymen")))
                 .collect(Collectors.toList());
 

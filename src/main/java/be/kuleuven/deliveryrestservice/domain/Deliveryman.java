@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.time.LocalTime;
 
 public class Deliveryman {
-    private UUID id;
+    private UUID deliverymanId;
     private String name;
     private List<Itinerary> itineraries;
     private List<Itinerary> bookedTimes;
@@ -19,19 +19,19 @@ public class Deliveryman {
     }
 
     public Deliveryman(String name, List<Itinerary> itineraries) {
-        this.id = UUID.randomUUID();
+        this.deliverymanId = UUID.randomUUID();
         this.name = name;
         this.itineraries = itineraries;
         this.bookedTimes = new ArrayList<>();
         this.totalEarnings = 0.0;
     }
 
-    public UUID getId() {
-        return id;
+    public UUID getDeliverymanId() {
+        return deliverymanId;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
+    public void setDeliverymanId(UUID id) {
+        this.deliverymanId = id;
     }
 
     public String getName() {
