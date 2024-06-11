@@ -14,22 +14,22 @@ public class DeliverymanRepository {
     @PostConstruct
     public void initData() {
         // Initialize with some deliverymen and itineraries for testing
-        Deliveryman maxi = new Deliveryman("Maxi Meme", Arrays.asList(
-                new Itinerary(LocalTime.of(9, 0), LocalTime.of(17, 0))
+        Deliveryman maxi = new Deliveryman("Maxi Meme", "123-456-7890", Arrays.asList(
+                new Itinerary(LocalTime.of(9, 0), LocalTime.of(23, 59))
         ));
         deliverymen.put(maxi.getId(), maxi);
 
-        Deliveryman tough = new Deliveryman("Tough Mass", Arrays.asList(
+        Deliveryman tough = new Deliveryman("Tough Mass", "234-567-8901", Arrays.asList(
                 new Itinerary(LocalTime.of(8, 0), LocalTime.of(16, 0))
         ));
         deliverymen.put(tough.getId(), tough);
 
-        Deliveryman luck = new Deliveryman("Luck Ass", Arrays.asList(
+        Deliveryman luck = new Deliveryman("Luck Ass", "345-678-9012", Arrays.asList(
                 new Itinerary(LocalTime.of(7, 0), LocalTime.of(15, 0))
         ));
         deliverymen.put(luck.getId(), luck);
 
-        Deliveryman tri = new Deliveryman("Tri Tan", Arrays.asList(
+        Deliveryman tri = new Deliveryman("Tri Tan", "456-789-0123", Arrays.asList(
                 new Itinerary(LocalTime.of(10, 0), LocalTime.of(18, 0))
         ));
         deliverymen.put(tri.getId(), tri);
@@ -51,7 +51,7 @@ public class DeliverymanRepository {
         return Collections.emptyList();
     }
 
-    public String addOrder(DeliveryOrder order) {
+    public OrderResponse addOrder(DeliveryOrder order) {
         Deliveryman deliveryman = deliverymen.get(order.getDeliverymanId());
         if (deliveryman != null) {
             // Assume every delivery takes 45 minutes
@@ -63,15 +63,24 @@ public class DeliverymanRepository {
                         orders.add(order);
                         deliveryman.bookTime(now, deliveryEndTime);
                         deliveryman.addEarnings(15.0);
-                        return "Order placed successfully.";
-                    } else {
-                        return "Deliveryman is already booked during this time.";
+                        return new OrderResponse("success", deliveryman.getName(), deliveryman.getPhone(), null);
                     }
                 }
             }
-            return "No available deliverymen.";
+            LocalTime earliestAvailableTime = calculateEarliestAvailableTime(deliveryman);
+            return new OrderResponse("fail", null, null, earliestAvailableTime);
         }
-        return "Invalid deliveryman ID.";
+        return new OrderResponse("invalid deliveryman ID", null, null, null);
+    }
+
+    private LocalTime calculateEarliestAvailableTime(Deliveryman deliveryman) {
+        LocalTime now = LocalTime.now();
+        for (Itinerary itinerary : deliveryman.getItineraries()) {
+            if (itinerary.getEndTime().isAfter(now)) {
+                return itinerary.getEndTime();
+            }
+        }
+        return null;
     }
 
     public double getTotalEarnings(UUID deliverymanId) {

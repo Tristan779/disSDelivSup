@@ -10,6 +10,7 @@ public class Deliveryman {
     private String name;
     private List<Itinerary> itineraries;
     private List<Itinerary> bookedTimes;
+    private String phone;
     private double totalEarnings;
 
     // Constructors, getters, and setters
@@ -18,7 +19,7 @@ public class Deliveryman {
         this.bookedTimes = new ArrayList<>();
     }
 
-    public Deliveryman(String name, List<Itinerary> itineraries) {
+    public Deliveryman(String name, String phone, List<Itinerary> itineraries) {
         this.id = UUID.randomUUID();
         this.name = name;
         this.itineraries = itineraries;
@@ -32,6 +33,14 @@ public class Deliveryman {
 
     public void setId(UUID id) {
         this.id = id;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getName() {
