@@ -55,8 +55,8 @@ public class DeliverymanRestController {
     }
 
     @PostMapping("/rest/orders")
-    public ResponseEntity<String> placeOrder(@RequestBody DeliveryOrder order) {
-        String response = deliverymanRepository.addOrder(order);
+    public ResponseEntity<OrderResponse> placeOrder(@RequestBody DeliveryOrder order) {
+        OrderResponse response = deliverymanRepository.addOrder(order);
         return ResponseEntity.ok(response);
     }
 
