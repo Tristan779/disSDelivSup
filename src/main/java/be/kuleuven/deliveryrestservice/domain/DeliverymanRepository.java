@@ -52,8 +52,7 @@ public class DeliverymanRepository {
     }
 
     public OrderResponse addOrder(DeliveryOrder order) {
-        Deliveryman deliveryman = deliverymen.get(order.getDeliverymanId());
-        if (deliveryman != null) {
+        for (Deliveryman deliveryman : deliverymen.values()) {
             // Assume every delivery takes 45 minutes
             LocalTime now = LocalTime.now();
             LocalTime deliveryEndTime = now.plusMinutes(45);
@@ -63,24 +62,28 @@ public class DeliverymanRepository {
                         orders.add(order);
                         deliveryman.bookTime(now, deliveryEndTime);
                         deliveryman.addEarnings(15.0);
-                        return new OrderResponse("Success", deliveryman.getName(), deliveryman.getPhone(), null);
+                        return new OrderResponse("Success", deliveryman.getName(), deliveryman.getPhone(), null,
+                                order.getUserName(), order.getStreet(), order.getNumber(), order.getCity(), order.getZip(), order.getUserPhoneNumber(), order.getRestaurantNames());
                     }
                 }
             }
-            LocalTime earliestAvailableTime = calculateEarliestAvailableTime(deliveryman);
-            return new OrderResponse("Fail", null, null, earliestAvailableTime);
         }
-        return new OrderResponse("invalid deliveryman ID", null, null, null);
+        LocalTime earliestAvailableTime = calculateEarliestAvailableTime();
+        return new OrderResponse("Fail", null, null, earliestAvailableTime,
+                order.getUserName(), order.getStreet(), order.getNumber(), order.getCity(), order.getZip(), order.getUserPhoneNumber(), order.getRestaurantNames());
     }
 
-    private LocalTime calculateEarliestAvailableTime(Deliveryman deliveryman) {
+    private LocalTime calculateEarliestAvailableTime() {
         LocalTime now = LocalTime.now();
-        for (Itinerary itinerary : deliveryman.getItineraries()) {
-            if (itinerary.getEndTime().isAfter(now)) {
-                return itinerary.getEndTime();
+        LocalTime earliestAvailableTime = null;
+        for (Deliveryman deliveryman : deliverymen.values()) {
+            for (Itinerary itinerary : deliveryman.getItineraries()) {
+                if (itinerary.getEndTime().isAfter(now) && (earliestAvailableTime == null || itinerary.getStartTime().isBefore(earliestAvailableTime))) {
+                    earliestAvailableTime = itinerary.getStartTime();
+                }
             }
         }
-        return null;
+        return earliestAvailableTime;
     }
 
     public double getTotalEarnings(UUID deliverymanId) {

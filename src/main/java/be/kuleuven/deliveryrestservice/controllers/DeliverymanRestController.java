@@ -7,6 +7,8 @@ import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.List;
 import java.util.UUID;
@@ -18,10 +20,12 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 public class DeliverymanRestController {
 
     private final DeliverymanRepository deliverymanRepository;
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    DeliverymanRestController(DeliverymanRepository deliverymanRepository) {
+    DeliverymanRestController(DeliverymanRepository deliverymanRepository, ObjectMapper objectMapper) {
         this.deliverymanRepository = deliverymanRepository;
+        this.objectMapper = objectMapper;
     }
 
     @GetMapping("/rest/deliverymen")
@@ -55,7 +59,24 @@ public class DeliverymanRestController {
     }
 
     @PostMapping("/rest/orders")
-    public ResponseEntity<OrderResponse> placeOrder(@RequestBody DeliveryOrder order) {
+    public ResponseEntity<OrderResponse> placeOrder(
+            @RequestParam String orderDetails,
+            @RequestParam String userName,
+            @RequestParam String street,
+            @RequestParam String number,
+            @RequestParam String city,
+            @RequestParam String zip,
+            @RequestParam String phoneNumber,
+            @RequestParam String restaurantNames) {
+
+        List<String> restaurantNameList;
+        try {
+            restaurantNameList = objectMapper.readValue(restaurantNames, new TypeReference<List<String>>() {});
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new OrderResponse("Invalid restaurant names format", null, null, null, userName, street, number, city, zip, phoneNumber, null));
+        }
+
+        DeliveryOrder order = new DeliveryOrder(UUID.randomUUID(), orderDetails, userName, street, number, city, zip, phoneNumber, restaurantNameList);
         OrderResponse response = deliverymanRepository.addOrder(order);
         return ResponseEntity.ok(response);
     }
