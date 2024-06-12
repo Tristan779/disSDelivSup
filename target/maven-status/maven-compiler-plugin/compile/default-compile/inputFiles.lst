@@ -1,7 +1,8 @@
-/Users/tristanpelgrims/DisS/disSsupDeliv/src/main/java/be/kuleuven/deliveryrestservice/DeliveryServiceApplication.java
-/Users/tristanpelgrims/DisS/disSsupDeliv/src/main/java/be/kuleuven/deliveryrestservice/controllers/DeliverymanRestController.java
-/Users/tristanpelgrims/DisS/disSsupDeliv/src/main/java/be/kuleuven/deliveryrestservice/domain/Deliveryman.java
-/Users/tristanpelgrims/DisS/disSsupDeliv/src/main/java/be/kuleuven/deliveryrestservice/domain/Itinerary.java
-/Users/tristanpelgrims/DisS/disSsupDeliv/src/main/java/be/kuleuven/deliveryrestservice/domain/DeliveryOrder.java
-/Users/tristanpelgrims/DisS/disSsupDeliv/src/main/java/be/kuleuven/deliveryrestservice/exceptions/DeliverymanNotFoundException.java
-/Users/tristanpelgrims/DisS/disSsupDeliv/src/main/java/be/kuleuven/deliveryrestservice/domain/DeliverymanRepository.java
+/Users/maximebellis/Downloads/disSDelivSup/src/main/java/be/kuleuven/deliveryrestservice/exceptions/DeliverymanNotFoundException.java
+/Users/maximebellis/Downloads/disSDelivSup/src/main/java/be/kuleuven/deliveryrestservice/domain/Delivery.java
+/Users/maximebellis/Downloads/disSDelivSup/src/main/java/be/kuleuven/deliveryrestservice/domain/Deliveryman.java
+/Users/maximebellis/Downloads/disSDelivSup/src/main/java/be/kuleuven/deliveryrestservice/domain/DeliverymanRepository.java
+/Users/maximebellis/Downloads/disSDelivSup/src/main/java/be/kuleuven/deliveryrestservice/domain/DeliveryConfirmation.java
+/Users/maximebellis/Downloads/disSDelivSup/src/main/java/be/kuleuven/deliveryrestservice/controllers/DeliverymanRestController.java
+/Users/maximebellis/Downloads/disSDelivSup/src/main/java/be/kuleuven/deliveryrestservice/domain/Itinerary.java
+/Users/maximebellis/Downloads/disSDelivSup/src/main/java/be/kuleuven/deliveryrestservice/DeliveryServiceApplication.java

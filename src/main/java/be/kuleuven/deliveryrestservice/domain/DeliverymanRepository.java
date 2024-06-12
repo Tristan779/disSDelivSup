@@ -4,32 +4,33 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Component
 public class DeliverymanRepository {
     private final Map<UUID, Deliveryman> deliverymen = new HashMap<>();
-    private final List<DeliveryOrder> orders = new ArrayList<>();
+    private final List<Delivery> deliveries = new ArrayList<>();
 
     @PostConstruct
     public void initData() {
         // Initialize with some deliverymen and itineraries for testing
-        Deliveryman maxi = new Deliveryman("Maxi Meme", "123-456-7890", Arrays.asList(
+        Deliveryman maxi = new Deliveryman("John Doe", "123-456-7890", Arrays.asList(
                 new Itinerary(LocalTime.of(9, 0), LocalTime.of(23, 59))
         ));
         deliverymen.put(maxi.getDeliverymanId(), maxi);
 
-        Deliveryman tough = new Deliveryman("Tough Mass", "234-567-8901", Arrays.asList(
+        Deliveryman tough = new Deliveryman("Jane Smith", "234-567-8901", Arrays.asList(
                 new Itinerary(LocalTime.of(8, 0), LocalTime.of(16, 0))
         ));
         deliverymen.put(tough.getDeliverymanId(), tough);
 
-        Deliveryman luck = new Deliveryman("Luck Ass", "345-678-9012", Arrays.asList(
+        Deliveryman luck = new Deliveryman("Robert Johnson", "345-678-9012", Arrays.asList(
                 new Itinerary(LocalTime.of(7, 0), LocalTime.of(15, 0))
         ));
         deliverymen.put(luck.getDeliverymanId(), luck);
 
-        Deliveryman tri = new Deliveryman("Tri Tan", "456-789-0123", Arrays.asList(
+        Deliveryman tri = new Deliveryman("Emily Davis", "456-789-0123", Arrays.asList(
                 new Itinerary(LocalTime.of(10, 0), LocalTime.of(18, 0))
         ));
         deliverymen.put(tri.getDeliverymanId(), tri);
@@ -51,26 +52,25 @@ public class DeliverymanRepository {
         return Collections.emptyList();
     }
 
-    public OrderResponse addOrder(DeliveryOrder order) {
+    public DeliveryConfirmation requestDeliveryman(Delivery delivery) {
+        LocalTime now = LocalTime.now();
+        LocalTime endTime = now.plusMinutes(10 * delivery.getRestaurantNames().size()).plusHours(2);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH'h'mm");
+        String formattedEndTime = endTime.format(formatter);
         for (Deliveryman deliveryman : deliverymen.values()) {
-            // Assume every delivery takes 45 minutes
-            LocalTime now = LocalTime.now();
-            LocalTime deliveryEndTime = now.plusMinutes(45);
-            for (Itinerary itinerary : deliveryman.getItineraries()) {
-                if (itinerary.getStartTime().isBefore(now) && itinerary.getEndTime().isAfter(deliveryEndTime)) {
-                    if (deliveryman.isAvailable(now, deliveryEndTime)) {
-                        orders.add(order);
-                        deliveryman.bookTime(now, deliveryEndTime);
-                        deliveryman.addEarnings(15.0);
-                        return new OrderResponse("Success", deliveryman.getName(), deliveryman.getPhone(), null,
-                                order.getUserName(), order.getStreet(), order.getNumber(), order.getCity(), order.getZip(), order.getUserPhoneNumber(), order.getRestaurantNames());
-                    }
-                }
+            if (deliveryman.isAvailable(now, endTime)) {
+                // Book the timeslot
+                deliveryman.bookTime(now, endTime);
+                // Increase earnings
+                deliveryman.addEarnings(15);
+                // Add the delivery to deliveries list
+                deliveries.add(delivery);
+                // Create and return the DeliveryConfirmation
+                return new DeliveryConfirmation("Success", deliveryman.getName(), deliveryman.getPhone(), formattedEndTime);
             }
         }
-        LocalTime earliestAvailableTime = calculateEarliestAvailableTime();
-        return new OrderResponse("Fail", null, null, earliestAvailableTime,
-                order.getUserName(), order.getStreet(), order.getNumber(), order.getCity(), order.getZip(), order.getUserPhoneNumber(), order.getRestaurantNames());
+        // If no deliveryman is available, return a DeliveryConfirmation with status "Failed"
+        return new DeliveryConfirmation("Failed", null, null, null);
     }
 
     private LocalTime calculateEarliestAvailableTime() {

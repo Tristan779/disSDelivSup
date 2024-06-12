@@ -81,12 +81,18 @@ public class Deliveryman {
     }
 
     public boolean isAvailable(LocalTime startTime, LocalTime endTime) {
-        for (Itinerary booked : bookedTimes) {
-            if (booked.getStartTime().isBefore(endTime) && booked.getEndTime().isAfter(startTime)) {
-                return false; // Overlapping booking
-            }
-        }
-        return true;
+        return itineraries.stream()
+                .filter(itinerary -> isWithinItinerary(itinerary, startTime, endTime))
+                .anyMatch(itinerary -> isNotBooked(startTime, endTime));
+    }
+
+    private boolean isWithinItinerary(Itinerary itinerary, LocalTime startTime, LocalTime endTime) {
+        return !startTime.isBefore(itinerary.getStartTime()) && !endTime.isAfter(itinerary.getEndTime());
+    }
+
+    private boolean isNotBooked(LocalTime startTime, LocalTime endTime) {
+        return bookedTimes.stream()
+                .noneMatch(booked -> booked.getStartTime().isBefore(endTime) && booked.getEndTime().isAfter(startTime));
     }
 
     public void bookTime(LocalTime startTime, LocalTime endTime) {

@@ -1,7 +1,8 @@
 be/kuleuven/deliveryrestservice/domain/DeliverymanRepository.class
 be/kuleuven/deliveryrestservice/domain/Deliveryman.class
+be/kuleuven/deliveryrestservice/domain/DeliveryConfirmation.class
 be/kuleuven/deliveryrestservice/exceptions/DeliverymanNotFoundException.class
-be/kuleuven/deliveryrestservice/domain/DeliveryOrder.class
 be/kuleuven/deliveryrestservice/domain/Itinerary.class
 be/kuleuven/deliveryrestservice/controllers/DeliverymanRestController.class
 be/kuleuven/deliveryrestservice/DeliveryServiceApplication.class
+be/kuleuven/deliveryrestservice/domain/Delivery.class
